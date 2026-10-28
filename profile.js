@@ -16,7 +16,7 @@
 window.PROFILE = {
   name: "Cruzer",
   bio: "Piloting Service Available At IDR Price | Interested On My Service? Contact Me On Discord | Thank You For Visiting My Profile",
-  avatar: "img/Yinlin icon。；Wuthering Waves。.jpg",
+  avatar: "img/Profile picture.jpg",
   theme: "light",
 
   socials: [
@@ -30,8 +30,8 @@ window.PROFILE = {
       { label: "Sociabuzz", url: "https://sociabuzz.com/jekcrauzer/support" },
       { label: "Tako", url: "https://tako.id/Cruzer" }
     ] },
-    { label: "PriceList & List Antrian", url: "https://docs.google.com/spreadsheets/d/1-rViTa75Ez1KdCwlcxwf4slda2AzfjB2T91LLVloi_o/edit?gid=2075998965#gid=2075998965", icon: "clipboard", image: "img/1740868150868.jpg" },
-    { label: "Discord Server", url: "https://discord.gg/6YjXMjk92d", icon: "discord", image: "img/Wutheringwaves Wuwa Sticker - Wutheringwaves Wuwa Akaoni2gou - Temukan & Bagikan GIF.gif" },
+    { label: "PriceList & List Antrian", url: "https://docs.google.com/spreadsheets/d/1-rViTa75Ez1KdCwlcxwf4slda2AzfjB2T91LLVloi_o/edit?gid=2075998965#gid=2075998965", icon: "clipboard", image: "img/Full ikhlas IMG.jpg" },
+    { label: "Discord Server", url: "https://discord.gg/6YjXMjk92d", icon: "discord", image: "img/GIF fRover.gif" },
     { label: "Tiktok jekcrauzer", url: "https://www.tiktok.com/@jekcrauzer", icon: "tiktok", image: "" },
     // Add another link by uncommenting and editing this line:
     // { label: "New link", url: "https://example.com", icon: "link", image: "" }
