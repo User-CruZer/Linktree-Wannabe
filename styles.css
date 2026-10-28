@@ -109,15 +109,6 @@ textarea {
   will-change: transform;
 }
 
-/* Touch devices: keep the blobs still. Animating them forces the blurred card
-   above to be re-blurred every frame, which costs battery and smoothness. */
-@media (hover: none) {
-  .blob {
-    animation: none;
-    will-change: auto;
-  }
-}
-
 .blob-1 {
   width: 460px;
   height: 460px;
@@ -411,9 +402,12 @@ textarea {
   margin-top: 0;
   margin-bottom: 0;
   opacity: 0;
+  /* Hidden after the close animation finishes, so a collapsed GIF isn't painted every frame. */
+  visibility: hidden;
   transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease,
     margin-top 0.4s cubic-bezier(0.22, 1, 0.36, 1),
-    margin-bottom 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    margin-bottom 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.4s;
   order: 3;
 }
 
@@ -437,6 +431,8 @@ textarea {
   margin-top: 10px;
   margin-bottom: 0;
   opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -445,6 +441,8 @@ textarea {
     margin-top: 10px;
     margin-bottom: 0;
     opacity: 1;
+    visibility: visible;
+    transition-delay: 0s;
   }
 }
 
@@ -735,6 +733,26 @@ textarea {
 
   .actions {
     margin-top: 20px;
+  }
+}
+
+/* Touch devices (phones/tablets): drop the expensive GPU effects.
+   - backdrop-filter on the card has to re-blur the background on every scroll frame
+     (the background is fixed, the card scrolls), which is the main cause of mobile lag.
+   - The blobs are already soft radial gradients, so their extra blur filter and the
+     drift animation add cost without changing the look much.
+   The card is semi-transparent either way, so the blobs still show through. */
+@media (hover: none) {
+  .blob {
+    animation: none;
+    filter: none;
+    will-change: auto;
+  }
+
+  .card,
+  .theme-toggle {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
 
