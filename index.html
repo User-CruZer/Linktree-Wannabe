@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Cruzer — LinkHub</title>
+  <meta name="description" content="Piloting service available at IDR price. Interested in my service? Contact me on Discord.">
+  <!-- Link preview card (Discord, WhatsApp, etc.). Keep these in sync with profile.js —
+       preview bots don't run JavaScript, so they only read what's written here. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Cruzer — LinkHub">
+  <meta property="og:description" content="Piloting service available at IDR price. Interested in my service? Contact me on Discord.">
+  <meta name="twitter:card" content="summary">
+  <meta name="theme-color" content="#f4ecdd">
+  <!-- After hosting, uncomment these and put in your real site address (it must be a full https:// URL):
+  <meta property="og:url" content="https://your-site.example/">
+  <meta property="og:image" content="https://your-site.example/img/avatar.jpg">
+  -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231a1712' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="profile.js"></script>
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem("linkhub.theme");
+        var preferred = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        var configured = window.PROFILE && window.PROFILE.theme;
+        var fallback = configured === "light" || configured === "dark" ? configured : preferred;
+        document.documentElement.dataset.theme = saved === "light" || saved === "dark" ? saved : fallback;
+      } catch (error) {}
+    })();
+  </script>
+</head>
+<body>
+  <div class="bg-blobs" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+
+  <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
+
+  <main id="card" class="card">
+    <header class="profile">
+      <img id="avatar" class="avatar" alt="Profile picture" width="104" height="104" fetchpriority="high" decoding="async">
+      <h1 id="name" class="name">LinkHub</h1>
+      <p id="bio" class="bio"></p>
+    </header>
+
+    <nav id="socials" class="socials" aria-label="Social profiles"></nav>
+
+    <section id="links" class="links" aria-label="Links"></section>
+
+    <footer class="actions">
+      <button id="shareBtn" class="btn action-btn" type="button"></button>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
