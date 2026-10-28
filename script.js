@@ -268,6 +268,7 @@ function normalizeProfile(raw) {
 
   return {
     name: String(value.name || FALLBACK_PROFILE.name),
+    title: typeof value.title === "string" ? value.title.trim() : "",
     bio: typeof value.bio === "string" ? value.bio : "",
     avatar: typeof value.avatar === "string" ? value.avatar : "",
     theme: value.theme === "light" || value.theme === "dark" ? value.theme : "auto",
@@ -305,7 +306,7 @@ function renderBio(value) {
 }
 
 function render() {
-  document.title = `${profile.name} — LinkHub`;
+  document.title = profile.title || profile.name;
   renderAvatar();
 
   els.name.textContent = profile.name;

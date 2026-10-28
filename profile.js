@@ -1,6 +1,8 @@
 // ── Page content ────────────────────────────────────────────────
 // Edit this file, save, then commit + push to GitHub. That's it.
 //
+// title:    Text shown on the browser tab. Leave "" to just show your name.
+//           Also update <title> and og:title in index.html so link previews match.
 // bio:      Use " | " to split the bio into separate lines.
 // avatar:   "" shows your initials, or use a path like "assets/avatar.jpg"
 // theme:    "auto", "light", or "dark"
@@ -15,6 +17,7 @@
 
 window.PROFILE = {
   name: "Cruzer",
+  title: "Cruzer | Piloting Service",
   bio: "Piloting Service Available At IDR Price | Interested On My Service? Contact Me On Discord | Thank You For Visiting My Profile",
   avatar: "img/Profile picture.jpg",
   theme: "light",
