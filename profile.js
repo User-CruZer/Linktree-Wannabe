@@ -20,7 +20,7 @@ window.PROFILE = {
   title: "Cruzer | Piloting Service",
   bio: "Piloting Service Available At IDR Price | Interested On My Service? Contact Me On Discord | Thank You For Visiting My Profile",
   avatar: "img/Profile picture.jpg",
-  theme: "light",
+  theme: "auto",
 
   socials: [
     // { platform: "instagram", url: "https://instagram.com" },

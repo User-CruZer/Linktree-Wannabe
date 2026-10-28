@@ -475,21 +475,35 @@ function updateThemeButton() {
   );
 }
 
+const THEME_COLORS = { light: "#f4ecdd", dark: "#0d0b09" };
+
 function applyTheme(theme) {
   document.documentElement.dataset.theme = theme;
+  // Match the mobile browser bar to the page, even if the visitor toggled away from their system theme.
+  document.querySelectorAll('meta[name="theme-color"]').forEach((meta) => {
+    meta.content = THEME_COLORS[theme];
+  });
   updateThemeButton();
+}
+
+function systemTheme() {
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
 }
 
 function initTheme() {
   const saved = readStorage(THEME_KEY);
-  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
   const configured =
-    profile.theme === "light" || profile.theme === "dark"
-      ? profile.theme
-      : prefersLight
-        ? "light"
-        : "dark";
+    profile.theme === "light" || profile.theme === "dark" ? profile.theme : systemTheme();
   applyTheme(saved === "light" || saved === "dark" ? saved : configured);
+
+  // With theme "auto", follow the system live (e.g. phone switching to dark mode at night)
+  // until the visitor picks a theme themselves with the toggle.
+  if (profile.theme === "auto") {
+    window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", () => {
+      if (readStorage(THEME_KEY)) return;
+      applyTheme(systemTheme());
+    });
+  }
 }
 
 function toggleTheme() {
