@@ -77,6 +77,31 @@ window.PRICELIST = {
           
           ]
         },
+        {
+          name: "Rinascita",
+          image: "img/pricelist/Rinascita_Emblem.webp",
+          items: [
+            { name: "Ragunna", price: "Rp 275.000", note: "100% Map Progress", image: "img/pricelist/Rinascita.webp" },
+            { name: "Septimont", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Capitoline_hill.webp" },
+          
+          ]
+        },
+        {
+          name: "Black Shores",
+          image: "img/pricelist/The_Black_Shores_Emblem.webp",
+          items: [
+            { name: " The Black Shores", price: "Rp 50.000", note: "100% Map Progress", image: "img/pricelist/Black_Shores_Archipelago.webp" },
+          
+          ]
+        },
+        {
+          name: "Jinzhou",
+          image: "img/pricelist/Huanglong_Emblem.webp",
+          items: [
+            { name: "Jinzhou Area", price: "Rp 300.000", note: "100% Map Progress", image: "img/pricelist/Jinzhou.webp" },
+          
+          ]
+        },
         // Add another province by copying the block above, e.g.:
         // {
         //   name: "Province name",
@@ -105,13 +130,18 @@ window.PRICELIST = {
     {
       name: "Quest",
       items: [
-        // { name: "Service name", price: "Rp 10.000", note: "", image: "" },
+        { name: "Main Quests", price: "Rp 15.000", note: "Per Chapter", image: "img/pricelist/Icon_Main_Quests.webp" },
+        { name: "Side Quests", price: "Rp 5.000", note: "Per 3 Quests", image: "img/pricelist/Icon_Side_Quests.webp" },
+        { name: "Exploration Quests", price: "Rp 10.000", note: "Per Quest, Tales Quest Counts as exploration quest", image: "img/pricelist/Icon_Exploration_Quests.webp" },
       ]
     },
     {
       name: "Daily/Rawat Akun",
       items: [
-        // { name: "Service name", price: "Rp 10.000", note: "", image: "" },
+        { name: "Daily Login 7 Days", price: "Rp 15.000", note: "Include 4 Endgame Content + Request Waveplate", image: "" },
+        { name: "Daily Login 30 Days", price: "Rp 50.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
+        { name: "Rakun 42 Days + Limited Event + New Main Story Quest", price: "Rp 150.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
+        { name: "Rakun 42 Days + Limited Event + New Main Story Quest + Explore New Areas", price: "Rp 250.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
       ]
     }
   ],
