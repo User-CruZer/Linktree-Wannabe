@@ -62,8 +62,18 @@ window.PRICELIST = {
           name: "Mengzhou",
           image: "img/pricelist/Mengzhou_Emblem.webp",
           items: [
-            { name: "Xuanfang Area", price: "Rp 100.000", note: "100% Map Progress", image: "" },
-            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "100% Map Progress", image: "" },
+            { name: "Xuanfang Area", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Xuanfang_Hold.webp" },
+            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Simulacrum_Nexus_of_Mengzhou.webp" },
+          
+          ]
+        },
+        {
+          name: "Roya Frostlands",
+          image: "img/pricelist/Roya_Frostlands_Emblem.webp",
+          items: [
+            { name: "Lahai Roi", price: "Rp 115.000", note: "100% Map Progress", image: "img/pricelist/Startorch_Academy.webp" },
+            { name: "Frostland Surface", price: "Rp 80.000", note: "100% Map Progress", image: "img/pricelist/Frostlands_Transit_Port.webp" },
+            { name: "Dimmr Plains", price: "Rp 80.000", note: "100% Map Progress", image: "img/pricelist/Sealed_Fissure.webp" },
           
           ]
         },
