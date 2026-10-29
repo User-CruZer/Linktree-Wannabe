@@ -165,6 +165,8 @@ function normalizeUrl(value) {
   if (/^tel:/i.test(raw)) return raw;
   if (/^https?:\/\//i.test(raw)) return raw;
   if (/^\/\//.test(raw)) return "https:" + raw;
+  // Pages on this site, e.g. "pricelist.html" or "./pricelist.html"
+  if (/^(\.{0,2}\/)?[\w-]+\.html?([?#].*)?$/i.test(raw)) return raw;
   if (/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(raw)) return "mailto:" + raw;
   if (/^[a-z][a-z0-9+.-]*:/i.test(raw)) return "";
   return "https://" + raw;

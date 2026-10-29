@@ -62,6 +62,9 @@ body {
   min-height: 100vh;
   min-height: 100svh;
   display: grid;
+  /* One column capped at the screen width. Without this the column grows to fit the
+     longest link label (they don't wrap), pushing the card off the right edge on phones. */
+  grid-template-columns: minmax(0, 1fr);
   /* Top-aligned, then pushed down by --center-top (set in script.js from the card's
      collapsed height) so it looks centered but doesn't shift when a preview expands. */
   align-items: start;
@@ -166,6 +169,250 @@ textarea {
 .theme-toggle .icon {
   width: 19px;
   height: 19px;
+}
+
+/* Pricelist page */
+.back-btn {
+  position: fixed;
+  top: calc(20px + env(safe-area-inset-top));
+  left: calc(20px + env(safe-area-inset-left));
+  z-index: 20;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.back-btn .icon {
+  width: 19px;
+  height: 19px;
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.back-btn:active {
+  transform: scale(0.97);
+}
+
+.price-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 26px;
+}
+
+.price-group {
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  animation: rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 55ms);
+}
+
+.price-group-name {
+  margin: 0 0 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.price-group-note {
+  margin: -4px 0 12px;
+  font-size: 0.78rem;
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.price-rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.price-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-top: 1px dashed var(--border);
+}
+
+.price-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.price-row:last-child {
+  padding-bottom: 0;
+}
+
+.price-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.price-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.price-item-note {
+  font-size: 0.76rem;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.price-value {
+  flex: none;
+  margin-left: auto;
+  font-size: 0.92rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.price-row:has(.price-thumb) {
+  align-items: center;
+}
+
+.price-thumb {
+  flex: none;
+  width: 52px;
+  height: 52px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  overflow: hidden;
+  cursor: zoom-in;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.price-thumb img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.price-thumb:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.price-thumb:active {
+  transform: scale(0.96);
+}
+
+.price-subgroup {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+.price-subgroup-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 10px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.price-subgroup-img {
+  flex: none;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+/* Sub-categories sit straight under the category title when it has no services of its own. */
+.price-group-name + .price-subgroup,
+.price-group-note + .price-subgroup {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.price-empty {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.preview {
+  max-width: min(92vw, 720px);
+  max-height: 90vh;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #f5eddd;
+  cursor: zoom-out;
+}
+
+.preview::backdrop {
+  background: rgba(0, 0, 0, 0.78);
+}
+
+.preview figure {
+  margin: 0;
+}
+
+.preview img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(90vh - 40px);
+  margin: 0 auto;
+  border-radius: 14px;
+}
+
+.preview figcaption {
+  margin-top: 10px;
+  text-align: center;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.actions .action-btn {
+  text-decoration: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back-btn:hover {
+    transform: translateX(-2px) scale(1.06);
+    border-color: var(--accent);
+  }
+
+  .price-thumb:hover {
+    transform: scale(1.05);
+    border-color: var(--ring);
+  }
+}
+
+@media (hover: none) {
+  .back-btn {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 .card {
@@ -334,9 +581,9 @@ textarea {
 
 .link-label {
   flex: 1;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 0;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 .link-arrow {
