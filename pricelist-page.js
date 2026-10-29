@@ -113,8 +113,20 @@ function render(data) {
   const list = $("priceGroups");
   const groups = Array.isArray(data.groups) ? data.groups.filter((group) => group && group.name) : [];
 
+  // Jump buttons at the top, one per category.
+  const jump = $("priceJump");
+  if (groups.length > 1) {
+    groups.forEach((group, index) => {
+      const chip = el("a", "price-jump-chip", String(group.name));
+      chip.href = `#cat-${index}`;
+      jump.appendChild(chip);
+    });
+    jump.hidden = false;
+  }
+
   groups.forEach((group, index) => {
     const section = el("section", "price-group");
+    section.id = `cat-${index}`;
     section.style.setProperty("--i", index);
     section.appendChild(el("h2", "price-group-name", String(group.name)));
     if (group.note) section.appendChild(el("p", "price-group-note", String(group.note)));

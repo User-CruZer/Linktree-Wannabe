@@ -48,7 +48,7 @@ window.PRICELIST = {
       note: "Make sure your characters are properly built",
       items: [
         { name: "Tower of Adversity", price: "Free", note: "Full Clear", image: "img/pricelist/Icon_Tower_of_Adversity.webp" },
-        { name: "Whimpering Waste", price: "Free", note: "Full Clear", image: "img/pricelist/Icon_Whimpering_Wastes.webp" },
+        { name: "Whimpering Wastes", price: "Free", note: "Full Clear", image: "img/pricelist/Icon_Whimpering_Wastes.webp" },
         { name: "Endstate Matrix", price: "Rp 15.000", note: "Title 58K + Cycle Task | Aste Only: Free", image: "img/pricelist/Icon_Endstate_Matrix.webp" },
         // { name: "Endstate Matrix", price: "Free", note: "Aste Only", image: "img/pricelist/Icon_Endstate_Matrix.webp" },
 
@@ -56,14 +56,15 @@ window.PRICELIST = {
     },
     {
       name: "Exploration",
+      note: "All prices are for 100% map progress",
       items: [],
       subgroups: [
         {
           name: "Mengzhou",
           image: "img/pricelist/Mengzhou_Emblem.webp",
           items: [
-            { name: "Xuanfang Area", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Xuanfang_Hold.webp" },
-            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Simulacrum_Nexus_of_Mengzhou.webp" },
+            { name: "Xuanfang Area", price: "Rp 100.000", note: "", image: "img/pricelist/Xuanfang_Hold.webp" },
+            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "", image: "img/pricelist/Simulacrum_Nexus_of_Mengzhou.webp" },
           
           ]
         },
@@ -71,9 +72,9 @@ window.PRICELIST = {
           name: "Roya Frostlands",
           image: "img/pricelist/Roya_Frostlands_Emblem.webp",
           items: [
-            { name: "Lahai Roi", price: "Rp 115.000", note: "100% Map Progress", image: "img/pricelist/Startorch_Academy.webp" },
-            { name: "Frostland Surface", price: "Rp 80.000", note: "100% Map Progress", image: "img/pricelist/Frostlands_Transit_Port.webp" },
-            { name: "Dimmr Plains", price: "Rp 80.000", note: "100% Map Progress", image: "img/pricelist/Sealed_Fissure.webp" },
+            { name: "Lahai Roi", price: "Rp 115.000", note: "", image: "img/pricelist/Startorch_Academy.webp" },
+            { name: "Frostland Surface", price: "Rp 80.000", note: "", image: "img/pricelist/Frostlands_Transit_Port.webp" },
+            { name: "Dimmr Plains", price: "Rp 80.000", note: "", image: "img/pricelist/Sealed_Fissure.webp" },
           
           ]
         },
@@ -81,8 +82,8 @@ window.PRICELIST = {
           name: "Rinascita",
           image: "img/pricelist/Rinascita_Emblem.webp",
           items: [
-            { name: "Ragunna", price: "Rp 275.000", note: "100% Map Progress", image: "img/pricelist/Rinascita.webp" },
-            { name: "Septimont", price: "Rp 100.000", note: "100% Map Progress", image: "img/pricelist/Capitoline_hill.webp" },
+            { name: "Ragunna", price: "Rp 275.000", note: "", image: "img/pricelist/Rinascita.webp" },
+            { name: "Septimont", price: "Rp 100.000", note: "", image: "img/pricelist/Capitoline_hill.webp" },
           
           ]
         },
@@ -90,7 +91,7 @@ window.PRICELIST = {
           name: "Black Shores",
           image: "img/pricelist/The_Black_Shores_Emblem.webp",
           items: [
-            { name: " The Black Shores", price: "Rp 50.000", note: "100% Map Progress", image: "img/pricelist/Black_Shores_Archipelago.webp" },
+            { name: "The Black Shores", price: "Rp 50.000", note: "", image: "img/pricelist/Black_Shores_Archipelago.webp" },
           
           ]
         },
@@ -98,7 +99,7 @@ window.PRICELIST = {
           name: "Jinzhou",
           image: "img/pricelist/Huanglong_Emblem.webp",
           items: [
-            { name: "Jinzhou Area", price: "Rp 300.000", note: "100% Map Progress", image: "img/pricelist/Jinzhou.webp" },
+            { name: "Jinzhou Area", price: "Rp 300.000", note: "", image: "img/pricelist/Jinzhou.webp" },
           
           ]
         },
