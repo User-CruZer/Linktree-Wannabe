@@ -29,7 +29,7 @@ window.PROFILE = {
   ],
 
   links: [
-    { label: "Donation Link", url: "", icon: "money", image: "img/Donation IMG.png", sublinks: [
+    { label: "Support Link", url: "", icon: "money", image: "img/Donation IMG.png", sublinks: [
       { label: "Sociabuzz", url: "https://sociabuzz.com/jekcrauzer/support" },
       { label: "Tako", url: "https://tako.id/Cruzer" }
     ] },
