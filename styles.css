@@ -171,6 +171,137 @@ textarea {
   height: 19px;
 }
 
+/* EN / ID switch, sits left of the theme button (added by i18n.js) */
+.lang-toggle {
+  position: fixed;
+  top: calc(20px + env(safe-area-inset-top));
+  right: calc(72px + env(safe-area-inset-right));
+  z-index: 20;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 0 5px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.lang-toggle span {
+  display: grid;
+  place-items: center;
+  min-width: 30px;
+  height: 32px;
+  padding: 0 6px;
+  border-radius: 999px;
+}
+
+.lang-toggle .is-current {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.lang-toggle:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lang-toggle:hover {
+    border-color: var(--accent);
+  }
+}
+
+@media (hover: none) {
+  .lang-toggle {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+/* Queue page */
+.queue-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.queue-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.queue-stat strong {
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.queue-stat span {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.queue-list .queue-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px dashed var(--border);
+}
+
+.queue-list .queue-row:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.queue-list .queue-row:last-child {
+  padding-bottom: 0;
+}
+
+.queue-pos {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.queue-list .queue-row:first-child .queue-pos {
+  background: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.queue-done {
+  flex: none;
+  margin-left: auto;
+  color: #3fb950;
+  font-weight: 700;
+}
+
 /* Pricelist page */
 .back-btn {
   position: fixed;
@@ -335,6 +466,299 @@ textarea {
   font-size: 0.92rem;
   font-weight: 700;
   white-space: nowrap;
+}
+
+/* Order builder: price + Add / stepper stacked on the right of each row */
+.price-side {
+  flex: none;
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+/* Picked service: a soft rounded box drawn as a separate layer (::before) behind
+   the row, reaching 10px past the text on each side. Only its opacity animates, so
+   picking or clearing a service never changes the row's size or moves the text.
+   Its own and the next row's dashed divider fade out so they don't cut through it. */
+.price-rows .price-row {
+  position: relative;
+  isolation: isolate;
+  transition: border-color 0.2s ease;
+}
+
+.price-rows .price-row::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -1px -10px 0;
+  border-radius: 14px;
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--border);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+/* The first and last rows have no outer padding, so stretch the box past them a bit. */
+.price-rows .price-row:first-child::before {
+  top: -7px;
+}
+
+.price-rows .price-row:last-child::before {
+  bottom: -10px;
+}
+
+.price-rows .price-row.is-selected::before {
+  opacity: 1;
+}
+
+.price-rows .price-row.is-selected,
+.price-rows .price-row.is-selected + .price-row {
+  border-top-color: transparent;
+}
+
+.order-add,
+.order-step {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  transition: transform 0.2s ease, background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.order-add {
+  gap: 4px;
+  min-height: 32px;
+  padding: 4px 11px 4px 8px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.order-add .icon,
+.order-step .icon {
+  width: 14px;
+  height: 14px;
+}
+
+.order-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.order-step {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.order-count {
+  min-width: 22px;
+  text-align: center;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.order-add:focus-visible,
+.order-step:focus-visible,
+.order-clear:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.order-add:active,
+.order-step:active {
+  transform: scale(0.94);
+}
+
+@media (pointer: coarse) {
+  .order-add {
+    min-height: 38px;
+  }
+
+  .order-step {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .order-add:hover,
+  .order-step:hover {
+    background: var(--surface-hover);
+    border-color: var(--ring);
+  }
+}
+
+.order-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  z-index: 30;
+  width: min(460px, calc(100vw - 2 * var(--page-x)));
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 10px 10px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--border);
+  background: var(--dialog-bg);
+  box-shadow: 0 18px 44px -12px rgba(0, 0, 0, 0.65);
+  animation: rise 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.order-summary {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.order-summary span {
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+.order-summary strong {
+  font-size: 0.98rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.order-clear {
+  flex: none;
+  min-height: 38px;
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 10px;
+  background: none;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.order-bar .action-btn {
+  flex: none;
+}
+
+/* Phones: make room so the total is never cut off. */
+@media (max-width: 420px) {
+  .order-bar {
+    gap: 4px;
+    padding-left: 14px;
+  }
+
+  .order-bar .action-btn {
+    padding: 10px 12px;
+  }
+
+  .order-bar .action-btn .icon {
+    display: none;
+  }
+
+  .order-clear {
+    padding: 6px 6px;
+  }
+}
+
+/* FAQ page: each question is a <details> that opens on tap */
+.faq-item {
+  border-top: 1px dashed var(--border);
+}
+
+.price-group-name + .faq-item {
+  border-top: 0;
+}
+
+.faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 44px;
+  padding: 8px 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  list-style: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.faq-q::-webkit-details-marker {
+  display: none;
+}
+
+.faq-q .icon {
+  width: 16px;
+  height: 16px;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-q .icon {
+  transform: rotate(180deg);
+}
+
+.faq-q:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.faq-a {
+  margin: 0 0 12px;
+  font-size: 0.82rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .faq-q:hover .icon {
+    color: var(--text);
+  }
+}
+
+/* Small text links between pages (e.g. "Read the FAQ") */
+.page-links {
+  margin: 14px 0 0;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.page-links a {
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+
+.page-links a:hover {
+  color: var(--text);
+}
+
+.no-order .price-order {
+  display: none;
+}
+
+body.has-order-bar {
+  padding-bottom: calc(var(--page-bottom) + 84px + env(safe-area-inset-bottom));
+}
+
+body.has-order-bar .toast {
+  bottom: calc(96px + env(safe-area-inset-bottom));
 }
 
 .price-row:has(.price-thumb) {
@@ -524,6 +948,76 @@ textarea {
   letter-spacing: -0.025em;
   line-height: 1.2;
   overflow-wrap: anywhere;
+}
+
+/* Open / closed badge under the name (set in profile.js) */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 2px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.status::before {
+  content: "";
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--dot);
+}
+
+.status-open {
+  --dot: #3fb950;
+}
+
+.status-closed {
+  --dot: #e5534b;
+}
+
+/* Pulse ring: a copy of the dot that grows and fades. Only transform + opacity
+   animate, which the GPU handles on its own — animating box-shadow instead would
+   make the phone repaint every frame for as long as the page is open. */
+.status {
+  position: relative;
+}
+
+.status-open::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  margin-top: -4px;
+  border-radius: 50%;
+  background: var(--dot);
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .status-open::after {
+    animation: status-pulse 2s ease-out infinite;
+  }
+}
+
+@keyframes status-pulse {
+  from {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  to {
+    transform: scale(2.75);
+    opacity: 0;
+  }
 }
 
 .bio {
@@ -928,6 +1422,19 @@ textarea {
     --page-x: 16px;
     --page-top: 76px;
     --page-bottom: 40px;
+  }
+
+  /* Phones: the card fills the screen width, so floating buttons would cover it
+     while scrolling. Pin them to the top of the page instead — they sit above the
+     card and scroll away with it. (Desktop keeps them fixed beside the card.) */
+  .theme-toggle,
+  .lang-toggle,
+  .back-btn {
+    position: absolute;
+  }
+
+  .price-group {
+    scroll-margin-top: 16px;
   }
 
   .card {

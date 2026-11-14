@@ -2,6 +2,9 @@
 // This is the only file you need to edit for the pricelist page.
 // Save, then commit + push to GitHub and the page updates.
 //
+// LANGUAGES: any text can be one string (same in both languages) or
+//   { en: "English text", id: "Teks bahasa Indonesia" }  — see i18n.js.
+//
 // ADD a service:    copy an example line below, paste it inside a category's
 //                   items: [ ... ] and change the text between the quotes.
 // EDIT a service:   change the text between the quotes.
@@ -16,14 +19,18 @@
 //   price:  required, e.g. "Rp 25.000"
 //   note:   optional small text under the name. Leave out or "" for none.
 //           Use " | " to split it into separate lines.
-//   image:  optional preview picture. Put the file in img/pricelist/ and write
-//           its path, e.g. "img/pricelist/tower.jpg". A full https:// link also works.
+//   image:  optional preview picture. Put the file in the category's folder inside
+//           img/pricelist/ and write its path, e.g.
+//           "img/pricelist/endgame-content/tower.jpg". A full https:// link also works.
+//           Folders: endgame-content, exploration, event, quest, daily-account-care.
+//           Exploration has one folder per province, e.g. exploration/mengzhou/.
+//           (Add a new folder when you add a new category.)
 //           Leave out or "" for no picture. Visitors tap it to see it full size.
 //
 // Remember the comma after each line, except it's fine to leave one on the last line.
 //
 // Example service line (copy this):
-//   { name: "Service name", price: "Rp 10.000", note: "Short description", image: "img/pricelist/example.jpg" },
+//   { name: "Service name", price: "Rp 10.000", note: "Short description", image: "img/pricelist/quest/example.jpg" },
 //
 // A category can also have sub-categories (like Permanent Event inside Event,
 // or each province inside Exploration):
@@ -37,76 +44,92 @@
 //
 // note (top of page): use " | " to split it into separate lines.
 // order: the button at the bottom. Leave url as "" to hide it.
+//   url:    where it goes — your Discord profile, so customers can DM you.
+//   server: optional. Shows "Can't message me? Join my Discord server first"
+//           under the button (Discord only allows DMs between people who share
+//           a server or are friends). Leave "" to hide it.
+//
+// Order builder: visitors tap "Add" on services, see the total, and press
+// "Copy order" to get a ready-made message to paste on Discord.
+//   orderMessage: the first line of that copied message.
+//   Prices are read from the price text: "Rp 15.000" counts as 15000, "Free"
+//   counts as 0, anything else (e.g. "Ask me") shows as "price to confirm".
+
+// Shared note used by several Daily / Account Care services below.
+const INCLUDES = {
+  en: "Includes 4 Endgame Content + Build/Pre-Farm Character on request",
+  id: "Termasuk 4 Konten Endgame + Request Build/Pre-Farm Karakter"
+};
 
 window.PRICELIST = {
   title: "Pricelist",
-  note: "All prices are in IDR | Contact me on Discord to order",
+  note: { en: "All prices are in IDR | Contact me on Discord to order", id: "Semua harga dalam IDR | Hubungi saya di Discord untuk order" },
 
   groups: [
     {
       name: "Endgame Content",
-      note: "Make sure your characters are properly built",
+      note: { en: "Make sure your characters are properly built", id: "Pastikan karakter kamu sudah di-build dengan baik" },
       items: [
-        { name: "Tower of Adversity", price: "Free", note: "Full Clear", image: "img/pricelist/Icon_Tower_of_Adversity.webp" },
-        { name: "Whimpering Wastes", price: "Free", note: "Full Clear", image: "img/pricelist/Icon_Whimpering_Wastes.webp" },
-        { name: "Endstate Matrix", price: "Rp 15.000", note: "Title 58K + Cycle Task | Aste Only: Free", image: "img/pricelist/Icon_Endstate_Matrix.webp" },
-        // { name: "Endstate Matrix", price: "Free", note: "Aste Only", image: "img/pricelist/Icon_Endstate_Matrix.webp" },
+        { name: "Tower of Adversity", price: "Free", note: "Full Clear", image: "img/pricelist/endgame-content/Icon_Tower_of_Adversity.webp" },
+        { name: "Whimpering Wastes", price: "Free", note: "Full Clear", image: "img/pricelist/endgame-content/Icon_Whimpering_Wastes.webp" },
+        { name: "Endstate Matrix", price: "Rp 15.000", note: "Title 58K + Cycle Task | Aste Only: Free", image: "img/pricelist/endgame-content/Icon_Endstate_Matrix.webp" },
+        // { name: "Endstate Matrix", price: "Free", note: "Aste Only", image: "img/pricelist/endgame-content/Icon_Endstate_Matrix.webp" },
 
       ]
     },
     {
-      name: "Exploration",
-      note: "All prices are for 100% map progress",
+      name: { en: "Exploration", id: "Eksplorasi" },
+      note: { en: "All prices are for 100% map progress", id: "Semua harga untuk progres map 100%" },
       items: [],
       subgroups: [
         {
           name: "Mengzhou",
-          image: "img/pricelist/Mengzhou_Emblem.webp",
+          image: "img/pricelist/exploration/mengzhou/Mengzhou_Emblem.webp",
           items: [
-            { name: "Xuanfang Area", price: "Rp 100.000", note: "", image: "img/pricelist/Xuanfang_Hold.webp" },
-            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "", image: "img/pricelist/Simulacrum_Nexus_of_Mengzhou.webp" },
+            { name: "Xuanfang Area", price: "Rp 100.000", note: "", image: "img/pricelist/exploration/mengzhou/Xuanfang_Hold.webp" },
+            { name: "Simulacrum Nexus Of Mengzhou", price: "Rp 100.000", note: "", image: "img/pricelist/exploration/mengzhou/Simulacrum_Nexus_of_Mengzhou.webp" },
           
           ]
         },
         {
           name: "Roya Frostlands",
-          image: "img/pricelist/Roya_Frostlands_Emblem.webp",
+          image: "img/pricelist/exploration/roya-frostlands/Roya_Frostlands_Emblem.webp",
           items: [
-            { name: "Lahai Roi", price: "Rp 115.000", note: "", image: "img/pricelist/Startorch_Academy.webp" },
-            { name: "Frostland Surface", price: "Rp 80.000", note: "", image: "img/pricelist/Frostlands_Transit_Port.webp" },
-            { name: "Dimmr Plains", price: "Rp 80.000", note: "", image: "img/pricelist/Sealed_Fissure.webp" },
+            { name: "Lahai Roi", price: "Rp 115.000", note: "", image: "img/pricelist/exploration/roya-frostlands/Startorch_Academy.webp" },
+            { name: "Frostland Surface", price: "Rp 80.000", note: "", image: "img/pricelist/exploration/roya-frostlands/Frostlands_Transit_Port.webp" },
+            { name: "Dimmr Plains", price: "Rp 80.000", note: "", image: "img/pricelist/exploration/roya-frostlands/Sealed_Fissure.webp" },
           
           ]
         },
         {
           name: "Rinascita",
-          image: "img/pricelist/Rinascita_Emblem.webp",
+          image: "img/pricelist/exploration/rinascita/Rinascita_Emblem.webp",
           items: [
-            { name: "Ragunna", price: "Rp 275.000", note: "", image: "img/pricelist/Rinascita.webp" },
-            { name: "Septimont", price: "Rp 100.000", note: "", image: "img/pricelist/Capitoline_hill.webp" },
+            { name: "Ragunna", price: "Rp 275.000", note: "", image: "img/pricelist/exploration/rinascita/Rinascita.webp" },
+            { name: "Septimont", price: "Rp 100.000", note: "", image: "img/pricelist/exploration/rinascita/Capitoline_hill.webp" },
           
           ]
         },
         {
           name: "Black Shores",
-          image: "img/pricelist/The_Black_Shores_Emblem.webp",
+          image: "img/pricelist/exploration/black-shores/The_Black_Shores_Emblem.webp",
           items: [
-            { name: "The Black Shores", price: "Rp 50.000", note: "", image: "img/pricelist/Black_Shores_Archipelago.webp" },
+            { name: "The Black Shores", price: "Rp 50.000", note: "", image: "img/pricelist/exploration/black-shores/Black_Shores_Archipelago.webp" },
           
           ]
         },
         {
           name: "Jinzhou",
-          image: "img/pricelist/Huanglong_Emblem.webp",
+          image: "img/pricelist/exploration/jinzhou/Huanglong_Emblem.webp",
           items: [
-            { name: "Jinzhou Area", price: "Rp 300.000", note: "", image: "img/pricelist/Jinzhou.webp" },
+            { name: "Jinzhou Area", price: "Rp 300.000", note: "", image: "img/pricelist/exploration/jinzhou/Jinzhou.webp" },
           
           ]
         },
         // Add another province by copying the block above, e.g.:
         // {
         //   name: "Province name",
-        //   image: "img/pricelist/Province_Emblem.webp",
+        //   image: "img/pricelist/exploration/province-name/Province_Emblem.webp",
         //   items: [
         //     { name: "City name", price: "Rp 10.000", note: "", image: "" },
         //   ]
@@ -131,21 +154,26 @@ window.PRICELIST = {
     {
       name: "Quest",
       items: [
-        { name: "Main Quests", price: "Rp 15.000", note: "Per Chapter", image: "img/pricelist/Icon_Main_Quests.webp" },
-        { name: "Side Quests", price: "Rp 5.000", note: "Per 3 Quests", image: "img/pricelist/Icon_Side_Quests.webp" },
-        { name: "Exploration Quests", price: "Rp 10.000", note: "Per Quest, Tales Quest Counts as exploration quest", image: "img/pricelist/Icon_Exploration_Quests.webp" },
+        { name: "Main Quests", price: "Rp 15.000", note: "Per Chapter", image: "img/pricelist/quest/Icon_Main_Quests.webp" },
+        { name: "Side Quests", price: "Rp 5.000", note: { en: "Per 3 Quests", id: "Per 3 Quest" }, image: "img/pricelist/quest/Icon_Side_Quests.webp" },
+        { name: "Exploration Quests", price: "Rp 10.000", note: { en: "Per Quest, Tales Quest counts as an exploration quest", id: "Per Quest, Tales Quest dihitung sebagai exploration quest" }, image: "img/pricelist/quest/Icon_Exploration_Quests.webp" },
       ]
     },
     {
-      name: "Daily/Rawat Akun",
+      name: { en: "Daily / Account Care", id: "Daily / Rawat Akun" },
       items: [
-        { name: "Daily Login 7 Days", price: "Rp 15.000", note: "Include 4 Endgame Content + Request Waveplate", image: "" },
-        { name: "Daily Login 30 Days", price: "Rp 50.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
-        { name: "Rakun 42 Days + Limited Event + New Main Story Quest", price: "Rp 150.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
-        { name: "Rakun 42 Days + Limited Event + New Main Story Quest + Explore New Areas", price: "Rp 250.000", note: "Include 4 Endgame Content + Request Build/Pre-Farm Character", image: "" },
+        { name: { en: "Daily Login 7 Days", id: "Daily Login 7 Hari" }, price: "Rp 15.000", note: { en: "Includes 4 Endgame Content + Waveplate on request", id: "Termasuk 4 Konten Endgame + Request Waveplate" }, image: "" },
+        { name: { en: "Daily Login 30 Days", id: "Daily Login 30 Hari" }, price: "Rp 50.000", note: INCLUDES, image: "" },
+        { name: { en: "Account Care 42 Days + Limited Event + New Main Story Quest", id: "Rakun 42 Hari + Event Limited + Main Story Quest Baru" }, price: "Rp 150.000", note: INCLUDES, image: "" },
+        { name: { en: "Account Care 42 Days + Limited Event + New Main Story Quest + Explore New Areas", id: "Rakun 42 Hari + Event Limited + Main Story Quest Baru + Explore Area Baru" }, price: "Rp 250.000", note: INCLUDES, image: "" },
       ]
     }
   ],
 
-  order: { label: "Order on Discord", url: "https://discord.gg/6YjXMjk92d" }
+  order: {
+    label: { en: "DM me on Discord", id: "DM Ke Discord" },
+    url: "https://discord.com/users/716269644301729873",
+    server: "https://discord.gg/6YjXMjk92d"
+  },
+  orderMessage: { en: "Hi Cruzer, I'd like to order:", id: "Halo Cruzer, saya mau order:" }
 };

@@ -1,5 +1,13 @@
 const THEME_KEY = "linkhub.theme";
 
+// i18n.js provides translations; fall back to plain English if it did not load.
+const I18N = window.I18N || {
+  lang: "en",
+  t: (v) => (v && typeof v === "object" ? String(v.en ?? v.id ?? "") : String(v ?? "")),
+  ui: (key) => ({ share: "Share", statusOpen: "Open for orders", statusClosed: "Currently full" })[key] || ""
+};
+const { t, ui } = I18N;
+
 const ICONS = {
   link: '<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>',
   instagram: '<rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>',
@@ -68,6 +76,7 @@ const els = {
   card: $("card"),
   avatar: $("avatar"),
   name: $("name"),
+  status: $("status"),
   bio: $("bio"),
   socials: $("socials"),
   links: $("links"),
@@ -251,14 +260,14 @@ function normalizeProfile(raw) {
             ? item.sublinks
                 .filter((s) => s && s.label && s.url)
                 .map((s) => ({
-                  label: String(s.label),
+                  label: t(s.label),
                   url: normalizeUrl(s.url)
                 }))
                 .filter((s) => s.url)
             : [];
           const url = item.url ? normalizeUrl(item.url) : "";
           return {
-            label: String(item.label),
+            label: t(item.label),
             url: url,
             icon: icons.has(iconName) ? iconName : "link",
             image: normalizeMedia(item.image),
@@ -270,10 +279,12 @@ function normalizeProfile(raw) {
 
   return {
     name: String(value.name || FALLBACK_PROFILE.name),
-    title: typeof value.title === "string" ? value.title.trim() : "",
-    bio: typeof value.bio === "string" ? value.bio : "",
+    title: t(value.title).trim(),
+    bio: t(value.bio),
     avatar: typeof value.avatar === "string" ? value.avatar : "",
     theme: value.theme === "light" || value.theme === "dark" ? value.theme : "auto",
+    status: String(value.status || "").trim().toLowerCase(),
+    statusText: t(value.statusText).trim(),
     socials,
     links
   };
@@ -307,11 +318,27 @@ function renderBio(value) {
   });
 }
 
+const STATUS_DEFAULTS = { open: ui("statusOpen"), closed: ui("statusClosed") };
+
+function renderStatus() {
+  const status = profile.status;
+  // Element can be missing if a cached old index.html is paired with this script.
+  if (!els.status) return;
+  if (!STATUS_DEFAULTS[status]) {
+    els.status.hidden = true;
+    return;
+  }
+  els.status.className = `status status-${status}`;
+  els.status.textContent = profile.statusText || STATUS_DEFAULTS[status];
+  els.status.hidden = false;
+}
+
 function render() {
   document.title = profile.title || profile.name;
   renderAvatar();
 
   els.name.textContent = profile.name;
+  renderStatus();
   renderBio(profile.bio);
 
   els.socials.innerHTML = "";
@@ -335,7 +362,7 @@ function render() {
   if (profile.links.length === 0) {
     const empty = document.createElement("p");
     empty.className = "empty-state";
-    empty.textContent = "No links yet. Add them in profile.js.";
+    empty.textContent = ui("noLinks");
     els.links.appendChild(empty);
   }
 
@@ -445,7 +472,7 @@ function render() {
     els.links.appendChild(link);
   });
 
-  els.shareBtn.innerHTML = icon("share") + "Share";
+  els.shareBtn.innerHTML = icon("share") + ui("share");
 }
 
 // Center the card vertically using its collapsed height. Done in JS (not CSS centering)
@@ -551,9 +578,9 @@ async function sharePage() {
 
   try {
     await copyText(url);
-    toast("Link copied to clipboard");
+    toast(ui("linkCopied"));
   } catch (error) {
-    toast("Could not copy the link");
+    toast(ui("linkCopyFailed"));
   }
 }
 

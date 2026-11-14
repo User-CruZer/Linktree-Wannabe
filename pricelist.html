@@ -17,6 +17,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script src="profile.js"></script>
+  <script src="i18n.js"></script>
   <script src="pricelist.js"></script>
   <script>
     (function () {
@@ -37,12 +38,13 @@
     <span class="blob blob-3"></span>
   </div>
 
-  <a id="backBtn" class="back-btn" href="index.html" aria-label="Back to profile" title="Back"></a>
+  <a id="backBtn" class="back-btn" href="index.html" aria-label="Back to profile" title="Back" data-i18n-label="back"></a>
   <button id="themeToggle" class="theme-toggle" type="button" aria-label="Toggle color theme"></button>
 
   <main class="card">
     <header class="profile">
       <h1 id="priceTitle" class="name">Pricelist</h1>
+      <p id="status" class="status" hidden></p>
       <p id="priceNote" class="bio"></p>
     </header>
 
@@ -53,6 +55,7 @@
     <footer class="actions">
       <a id="orderBtn" class="btn action-btn" target="_blank" rel="noopener noreferrer" hidden></a>
     </footer>
+    <p class="page-links"><a href="faq.html" data-i18n="readFaq">Read the FAQ &amp; Terms before ordering</a></p>
   </main>
 
   <dialog id="preview" class="preview" aria-label="Service preview">
@@ -61,6 +64,17 @@
       <figcaption id="previewCaption"></figcaption>
     </figure>
   </dialog>
+
+  <div id="orderBar" class="order-bar" role="region" aria-label="Your order" data-i18n-label="yourOrder" hidden>
+    <div class="order-summary">
+      <span id="orderCount"></span>
+      <strong id="orderTotal"></strong>
+    </div>
+    <button id="orderClear" class="order-clear" type="button" data-i18n="clear">Clear</button>
+    <button id="orderCopy" class="btn action-btn" type="button"></button>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script src="pricelist-page.js"></script>
 </body>
