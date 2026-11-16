@@ -140,7 +140,7 @@ window.PRICELIST = {
       name: "Event",
       items: [
         // Limited-time events go here.
-        // { name: "Service name", price: "Rp 10.000", note: "", image: "" },
+        { name: "Unwritten Dreams Leisure Event", price: "Rp 30.000", note: {en : "Only Include Limited Time Rewards", id: "Hanya Termasuk Hadiah Waktu Terbatas"}, image: "img/pricelist/event/second-coming-of-solaris-unwritten-dreams.avif" },
       ],
       subgroups: [
         {
