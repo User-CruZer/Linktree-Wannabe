@@ -468,13 +468,42 @@ textarea {
   white-space: nowrap;
 }
 
-/* Limited-time countdown under a service name ("Starts in …" / "Ends in …") */
+/* Limited-time countdown ("Starts in …" / "Ends in …"): its own line across the
+   row, under the name and price, lined up with the name. */
+.price-row:has(> .price-timer-line) {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+
+/* Keep picture + name + price together on the first line; only the badge wraps. */
+.price-row:has(> .price-timer-line) > .price-info {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.price-row:has(> .price-timer-line) > .price-thumb,
+.price-row:has(> .price-timer-line) > .price-side {
+  flex: none;
+}
+
+.price-timer-line {
+  order: 1;
+  flex: 0 0 100%;
+  display: flex;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+/* Rows with a picture: start under the name, not under the picture (52px + 14px gap). */
+.price-row:has(> .price-thumb) > .price-timer-line {
+  padding-left: 66px;
+}
+
 .price-timer {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  align-self: flex-start;
-  margin-top: 5px;
+  max-width: 100%;
   padding: 3px 9px;
   border-radius: 999px;
   border: 1px solid var(--border);

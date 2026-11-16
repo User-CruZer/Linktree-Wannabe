@@ -310,10 +310,14 @@ function formatDate(ms) {
   });
 }
 
-function addTimer(key, row, info, start, end) {
+// The badge sits on its own line under the name + price (full row width), so a long
+// countdown never squeezes into the Add button on phones.
+function addTimer(key, row, start, end) {
+  const line = el("div", "price-timer-line");
   const badge = el("span", "price-timer");
-  info.appendChild(badge);
-  timers.set(key, { row, badge, start, end });
+  line.appendChild(badge);
+  row.appendChild(line);
+  timers.set(key, { row, line, badge, start, end });
 }
 
 function expire(key) {
@@ -345,7 +349,7 @@ function tick() {
       tip = ui("endsAt", { date: formatDate(end) });
     } else {
       // Started and has no end date: nothing left to count down.
-      badge.remove();
+      timer.line.remove();
       timers.delete(key);
       return;
     }
@@ -405,7 +409,7 @@ function renderRows(items, group, sub) {
     // Key uses the English text so a picked service survives a language switch.
     const key = [base(group.name), sub ? base(sub.name) : "", base(item.name)].join(" / ");
     services.set(key, { name, sub: sub ? t(sub.name) : "", price, unit: parsePrice(item.price) });
-    if (start || end) addTimer(key, row, info, start, end);
+    if (start || end) addTimer(key, row, start, end);
 
     const side = el("div", "price-side");
     side.append(el("span", "price-value", price), orderControl(key, name, row));
