@@ -26,6 +26,15 @@
 //           Exploration has one folder per province, e.g. exploration/mengzhou/.
 //           (Add a new folder when you add a new category.)
 //           Leave out or "" for no picture. Visitors tap it to see it full size.
+//   start:  optional. When a limited event begins, e.g. "2026-11-20 10:00".
+//           Before then it shows "Starts in 3d 4h" (people can still pre-order).
+//   end:    optional. When it ends, e.g. "2026-12-08 03:59".
+//           While running it shows "Ends in 2d 5h", and a live 05:12:09 clock in
+//           the last 24 hours. After the end it disappears from the page by itself.
+//           Date only ("2026-12-08") is fine too: start = 00:00, end = 23:59.
+//           Times are in WIB (see timezone at the bottom). Leave "" for none.
+//           A sub-category or category can have start/end too — every service
+//           inside it then uses those dates (unless it has its own).
 //
 // Remember the comma after each line, except it's fine to leave one on the last line.
 //
@@ -140,7 +149,14 @@ window.PRICELIST = {
       name: "Event",
       items: [
         // Limited-time events go here.
-        { name: "Unwritten Dreams Leisure Event", price: "Rp 30.000", note: {en : "Only Include Limited Time Rewards", id: "Hanya Termasuk Hadiah Waktu Terbatas"}, image: "img/pricelist/event/second-coming-of-solaris-unwritten-dreams.avif" },
+        { name: "Unwritten Dreams Leisure Event", price: "Rp 30.000", note: {en : "Only Include Limited Time Rewards", id: "Hanya Termasuk Hadiah Waktu Terbatas"}, image: "img/pricelist/event/second-coming-of-solaris-unwritten-dreams.avif",
+          start: "2026-11-12", end: "2026-12-21 11:59" },
+        { name: "Turnabout Leisure Event", price: "Rp 15.000", note: {en : "", id: ""}, image: "img/pricelist/event/lahai-roi-blocks-turnabout.avif",
+          start: "2026-11-19 04:00", end: "2026-12-03 03:59" },
+        { name: "Lollo Campagin: Groundwork", price: "Rp 15.000", note: {en : "", id: ""}, image: "img/pricelist/event/lollo-campaign-groundwork.avif",
+          start: "2026-12-03 10:00", end: "2026-12-17 03:59" },
+        { name: "Dreamfield Odyssey", price: "Rp 15.000", note: {en : "", id: ""}, image: "img/pricelist/event/dreamfield-odyssey-combat-event.avif",
+          start: "2026-12-03 10:00", end: "2026-12-21 03:59" },
       ],
       subgroups: [
         {
@@ -175,5 +191,9 @@ window.PRICELIST = {
     url: "https://discord.com/users/716269644301729873",
     server: "https://discord.gg/6YjXMjk92d"
   },
-  orderMessage: { en: "Hi Cruzer, I'd like to order:", id: "Halo Cruzer, saya mau order:" }
+  orderMessage: { en: "Hi Cruzer, I'd like to order:", id: "Halo Cruzer, saya mau order:" },
+
+  // Timezone for start/end dates above. "+07:00" = WIB, "+08:00" = WITA, "+09:00" = WIT.
+  // Visitors anywhere in the world still see the correct countdown.
+  timezone: "+07:00"
 };

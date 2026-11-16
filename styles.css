@@ -468,6 +468,51 @@ textarea {
   white-space: nowrap;
 }
 
+/* Limited-time countdown under a service name ("Starts in …" / "Ends in …") */
+.price-timer {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  margin-top: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--accent-soft);
+  color: var(--text);
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.price-timer:empty {
+  display: none;
+}
+
+.price-timer::before {
+  content: "";
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--timer-dot, var(--muted));
+}
+
+.price-timer.is-upcoming {
+  --timer-dot: #58a6ff;
+}
+
+.price-timer.is-live {
+  --timer-dot: #3fb950;
+}
+
+.price-timer.is-ending {
+  --timer-dot: #f0883e;
+  border-color: rgba(240, 136, 62, 0.45);
+}
+
 /* Order builder: price + Add / stepper stacked on the right of each row */
 .price-side {
   flex: none;

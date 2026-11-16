@@ -259,11 +259,121 @@ function clearOrder() {
   toast(ui("orderCleared"));
 }
 
+// ── Limited-time countdown ──────────────────────────────────────
+// Services (or whole sub-categories / categories) can have start: and end: dates in
+// pricelist.js. Before the start they show "Starts in …", while running "Ends in …",
+// and once the end has passed they're removed from the page (and from the order).
+
+const DAY = 86400000;
+const timers = new Map(); // key -> { row, badge, start, end }
+let timeZone = "+07:00";
+let tickHandle = null;
+
+// "2026-12-08 03:59" or "2026-12-08" (date only: start = 00:00, end = 23:59:59),
+// read in the pricelist's timezone (WIB by default).
+function parseWhen(value, isEnd) {
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{1,2}):(\d{2}))?$/.exec(raw);
+  const ms = m
+    ? Date.parse(`${m[1]}-${m[2]}-${m[3]}T${m[4] ? `${m[4].padStart(2, "0")}:${m[5]}:00` : isEnd ? "23:59:59" : "00:00:00"}${timeZone}`)
+    : NaN;
+  if (Number.isNaN(ms)) {
+    console.warn(`pricelist.js: "${raw}" is not a valid date. Use "YYYY-MM-DD HH:MM", e.g. "2026-12-08 03:59".`);
+    return null;
+  }
+  return ms;
+}
+
+// A service uses its own dates, or else its sub-category's, or else its category's.
+function timeWindow(item, group, sub) {
+  const pick = (field) => [item, sub, group].map((o) => o && o[field]).find((v) => v);
+  return { start: parseWhen(pick("start"), false), end: parseWhen(pick("end"), true) };
+}
+
+function formatLeft(ms) {
+  const total = Math.max(0, Math.floor(ms / 1000));
+  const d = Math.floor(total / 86400);
+  const h = Math.floor((total % 86400) / 3600);
+  if (d >= 1) return ui("daysHours", { d, h });
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${pad(h)}:${pad(Math.floor((total % 3600) / 60))}:${pad(total % 60)}`;
+}
+
+function formatDate(ms) {
+  return new Date(ms).toLocaleString(I18N.lang === "id" ? "id-ID" : "en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function addTimer(key, row, info, start, end) {
+  const badge = el("span", "price-timer");
+  info.appendChild(badge);
+  timers.set(key, { row, badge, start, end });
+}
+
+function expire(key) {
+  const timer = timers.get(key);
+  timers.delete(key);
+  if (selection.has(key)) setQty(key, 0);
+  controls.delete(key);
+  services.delete(key);
+  const list = timer.row.parentElement;
+  timer.row.remove();
+  if (list && !list.children.length) list.replaceWith(el("p", "price-empty", ui("comingSoon")));
+}
+
+function tick() {
+  const now = Date.now();
+  timers.forEach((timer, key) => {
+    const { badge, start, end } = timer;
+    if (end && now >= end) return expire(key);
+    let state;
+    let text;
+    let tip;
+    if (start && now < start) {
+      state = "upcoming";
+      text = ui("startsIn", { time: formatLeft(start - now) });
+      tip = ui("startsAt", { date: formatDate(start) });
+    } else if (end) {
+      state = end - now < DAY ? "ending" : "live";
+      text = ui("endsIn", { time: formatLeft(end - now) });
+      tip = ui("endsAt", { date: formatDate(end) });
+    } else {
+      // Started and has no end date: nothing left to count down.
+      badge.remove();
+      timers.delete(key);
+      return;
+    }
+    badge.className = `price-timer is-${state}`;
+    if (badge.textContent !== text) badge.textContent = text;
+    badge.title = tip;
+  });
+  if (!timers.size && tickHandle) {
+    clearInterval(tickHandle);
+    tickHandle = null;
+  }
+}
+
+function startTimers() {
+  if (!timers.size) return;
+  tick();
+  tickHandle = setInterval(tick, 1000);
+}
+
 // ── Page ────────────────────────────────────────────────────────
 
+// Returns the list of services, or null if none are showing (e.g. all events ended).
 function renderRows(items, group, sub) {
   const rows = el("ul", "price-rows");
+  const now = Date.now();
   items.forEach((item) => {
+    const { start, end } = timeWindow(item, group, sub);
+    if (end && now >= end) return; // event is over: don't show it
     const row = el("li", "price-row");
     const name = t(item.name);
     const price = t(item.price);
@@ -295,13 +405,14 @@ function renderRows(items, group, sub) {
     // Key uses the English text so a picked service survives a language switch.
     const key = [base(group.name), sub ? base(sub.name) : "", base(item.name)].join(" / ");
     services.set(key, { name, sub: sub ? t(sub.name) : "", price, unit: parsePrice(item.price) });
+    if (start || end) addTimer(key, row, info, start, end);
 
     const side = el("div", "price-side");
     side.append(el("span", "price-value", price), orderControl(key, name, row));
     row.append(info, side);
     rows.appendChild(row);
   });
-  return rows;
+  return rows.children.length ? rows : null;
 }
 
 function openPreview(src, name) {
@@ -317,6 +428,7 @@ function render(data) {
   $("priceTitle").textContent = title;
   renderNote($("priceNote"), data.note);
   orderMessage = t(data.orderMessage).trim();
+  if (/^[+-]\d{2}:\d{2}$/.test(String(data.timezone || ""))) timeZone = data.timezone;
 
   const list = $("priceGroups");
   const groups = Array.isArray(data.groups) ? data.groups.filter((group) => group && group.name) : [];
@@ -344,7 +456,8 @@ function render(data) {
       ? group.subgroups.filter((sub) => sub && sub.name)
       : [];
 
-    if (items.length) section.appendChild(renderRows(items, group));
+    const rows = items.length ? renderRows(items, group) : null;
+    if (rows) section.appendChild(rows);
     else if (!subgroups.length) section.appendChild(el("p", "price-empty", ui("comingSoon")));
 
     subgroups.forEach((sub) => {
@@ -366,7 +479,7 @@ function render(data) {
       if (sub.note) subsection.appendChild(el("p", "price-group-note", t(sub.note)));
       const subItems = validItems(sub.items);
       subsection.appendChild(
-        subItems.length ? renderRows(subItems, group, sub) : el("p", "price-empty", ui("comingSoon"))
+        (subItems.length && renderRows(subItems, group, sub)) || el("p", "price-empty", ui("comingSoon"))
       );
       section.appendChild(subsection);
     });
@@ -451,6 +564,7 @@ function init() {
     loadOrder();
     updateOrderBar();
   }
+  startTimers();
 }
 
 init();
