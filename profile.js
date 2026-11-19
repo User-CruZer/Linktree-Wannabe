@@ -53,8 +53,8 @@ window.PROFILE = {
       { label: "Sociabuzz", url: "https://sociabuzz.com/jekcrauzer/support" },
       { label: "Tako", url: "https://tako.id/Cruzer" }
     ] },
-    { label: { en: "Queue", id: "List Antrian" }, url: "queue.html", icon: "clipboard", image: "img/Full ikhlas IMG.jpg" },
-    { label: "Pricelist", url: "pricelist.html", icon: "money", image: "" },
+    { label: { en: "Queue", id: "List Antrian" }, url: "queue.html", icon: "clipboard", image: "" },
+    { label: "Pricelist", url: "pricelist.html", icon: "money", image: "img/Full ikhlas IMG.jpg" },
     { label: { en: "FAQ & Terms", id: "FAQ & Ketentuan" }, url: "faq.html", icon: "list", image: "" },
     { label: "Discord Server", url: "https://discord.gg/6YjXMjk92d", icon: "discord", image: "img/GIF fRover.gif" },
     { label: "TikTok jekcrauzer", url: "https://www.tiktok.com/@jekcrauzer", icon: "tiktok", image: "" },
