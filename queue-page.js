@@ -4,6 +4,9 @@
 //   "Name (service ✅)"  -> finished
 //   "Name (service)"     -> still in the queue (shown in sheet order)
 //   rows without "( )"   -> notes, not shown
+// Pre-orders: a cell saying "Pre Order:" (any column) followed by names below it,
+//   e.g. "AdeRacer (PO Matrix 3.8 VIP)", until the first empty cell after them.
+//   Pre-orders marked ✅ are treated as done and not shown.
 // The sheet must stay shared as "Anyone with the link can view".
 // The sheet link itself is set in profile.js (queue.sheet).
 
@@ -92,23 +95,45 @@ function parseCsv(text) {
   return rows;
 }
 
+// "Name (service ✅)" -> { name, service, done }
+function parseEntry(text) {
+  const match = /^(.*?)\s*\((.*)\)\s*(.*)$/.exec(text) || [];
+  const clean = (value) => String(value || "").replace(/✅/g, "").replace(/\s+/g, " ").trim();
+  return {
+    name: clean(match[1]) || clean(text),
+    service: [clean(match[2]), clean(match[3])].filter(Boolean).join(" "),
+    done: text.includes("✅")
+  };
+}
+
 function parseEntries(rows) {
   return rows
     .map((row) => String(row[0] || "").trim())
     .filter(Boolean)
     .map((text) => text.replace(/^[-•]\s*/, ""))
     .filter((text) => /\(.+\)/.test(text))
-    .map((text) => {
-      const match = /^(.*?)\s*\((.*)\)\s*(.*)$/.exec(text) || [];
-      const done = text.includes("✅");
-      const clean = (value) => String(value || "").replace(/✅/g, "").replace(/\s+/g, " ").trim();
-      const extra = clean(match[3]);
-      return {
-        name: clean(match[1]) || clean(text),
-        service: [clean(match[2]), extra].filter(Boolean).join(" "),
-        done
-      };
-    });
+    .map(parseEntry);
+}
+
+// Finds the "Pre Order:" heading in any column and reads the cells under it.
+function parsePreorders(rows) {
+  for (let r = 0; r < rows.length; r++) {
+    for (let c = 0; c < rows[r].length; c++) {
+      if (!/^\s*pre[\s-]?orders?\s*:?\s*$/i.test(rows[r][c] || "")) continue;
+      const list = [];
+      for (let below = r + 1; below < rows.length; below++) {
+        const text = String(rows[below][c] || "").trim().replace(/^[-•]\s*/, "");
+        // Skip blank cells right under the heading; stop at the first gap after the names.
+        if (!text) {
+          if (list.length) break;
+          continue;
+        }
+        list.push(parseEntry(text));
+      }
+      return list.filter((entry) => !entry.done);
+    }
+  }
+  return [];
 }
 
 function entryRow(entry, position) {
@@ -129,7 +154,7 @@ function section(title, rows) {
   return group;
 }
 
-function render(entries) {
+function render(entries, preorders) {
   const active = entries.filter((entry) => !entry.done);
   const done = entries.filter((entry) => entry.done);
 
@@ -137,6 +162,7 @@ function render(entries) {
   stats.replaceChildren();
   [
     [active.length, ui("inQueue")],
+    [preorders.length, ui("preorders")],
     [done.length, ui("completed")]
   ].forEach(([value, label]) => {
     const stat = el("div", "queue-stat");
@@ -153,6 +179,14 @@ function render(entries) {
   body.appendChild(
     section(ui("nowInQueue"), active.length ? activeList : el("p", "price-empty", ui("queueEmpty")))
   );
+
+  if (preorders.length) {
+    const preList = el("ol", "price-rows queue-list queue-list-pre");
+    preorders.forEach((entry, index) => preList.appendChild(entryRow(entry, index + 1)));
+    const pre = section(ui("preorderTitle"), preList);
+    pre.insertBefore(el("p", "price-group-note", ui("preorderNote")), preList);
+    body.appendChild(pre);
+  }
 
   if (done.length) {
     const recentList = el("ul", "price-rows queue-list");
@@ -173,7 +207,8 @@ async function load(sheetUrl) {
     const text = await response.text();
     // A private sheet answers with a Google sign-in page instead of CSV.
     if (/^\s*</.test(text)) throw new Error("Sheet is not public");
-    render(parseEntries(parseCsv(text)));
+    const rows = parseCsv(text);
+    render(parseEntries(rows), parsePreorders(rows));
   } catch (error) {
     $("queueBody").replaceChildren(el("p", "empty-state", ui("queueError")));
   }
